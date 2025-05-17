@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Contact extends Model
 {
@@ -12,5 +13,16 @@ class Contact extends Model
     protected $fillable = [
         'name',
         'number',
+        'address',
+        'email'
+
     ];
+
+    public function contactlists(): HasMany {
+        return $this->hasMany(Contactlist::class);
+    }
+
+
+
+
 }

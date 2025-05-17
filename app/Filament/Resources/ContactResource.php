@@ -21,7 +21,10 @@ class ContactResource extends Resource
 {
     protected static ?string $model = Contact::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
+    public static function getPluralModelLabel(): string {
+        return auth()->user()->hasRole('Admin') ? 'All Contacts' : 'All Contacts';
+    }
 
     public static function form(Form $form): Form
     {
@@ -29,6 +32,11 @@ class ContactResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->unique(ignoreRecord: true)
+                    ->required(),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required(),
+                Forms\Components\TextInput::make('address')
                     ->required(),
                 PhoneInput::make('number')
                     ->defaultCountry('PH')
@@ -45,6 +53,10 @@ class ContactResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('address')
                     ->searchable(),
                 PhoneColumn::make('number')->displayFormat(PhoneInputNumberType::E164)
                     ->searchable(),
